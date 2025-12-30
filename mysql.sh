@@ -37,13 +37,13 @@ CHECK_ROOT
 
 echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
-dnf install mysql-server -y &>>$LOG_FILE
+dnf install mysql-server -y 
 VALIDATE $? "Installing Mysql-server"
 
-systemctl enable mysqld &>>$LOG_FILE
+systemctl enable mysqld 
 VALIDATE $? "Enabled Mysql-server"
 
-systemctl start mysqld &>>$LOG_FILE
+systemctl start mysqld 
 VALIDATE $? "started Mysql-sever"
 
 mysql -h mysql.daws100s.online -u root -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE
