@@ -36,20 +36,20 @@ CHECK_ROOT
 
 echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
-dnf install mysql-server -y &>>$LOG_FILE
+dnf install mysql-server -y &>> $LOG_FILE
 VALIDATE $? "Installing Mysql-server"
 
-systemctl enable mysqld &>>$LOG_FILE
+systemctl enable mysqld &>> $LOG_FILE
 VALIDATE $? "Enabled Mysql-server"
 
-systemctl start mysqld &>>$LOG_FILE
+systemctl start mysqld &>> $LOG_FILE
 VALIDATE $? "started Mysql-sever"
 
-mysql -h mysql.daws100s.online -u root -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE
+mysql -h mysql.daws100s.online -u root -pExpenseApp@1 -e 'show databases;' &>> $LOG_FILE
 
 if [ $? -ne 0 ]
 then 
-    echo "MYSQL root password is not setup, setting now" &>>$LOG_FILE
+    echo "MYSQL root password is not setup, setting now" &>> $LOG_FILE
     mysql_secure_installation --set-root-pass ExpenseApp@1
     VALIDATE $? "setting up root password"
 else
