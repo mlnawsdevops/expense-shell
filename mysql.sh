@@ -34,11 +34,11 @@ CHECK_ROOT
 
 echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
-dnf list installed mysql
+dnf list installed mysql &>>$LOG_FILE
 
 if [ $? -ne 0 ]
 then
-    echo "Mysql is $R not installed, going to install it... $N"
+    echo -e "Mysql is $R not installed, going to install it... $N"
     dnf install mysql-server -y &>>$LOG_FILE
     VALIDATE $? "Installing MySQL Server"
 
@@ -48,7 +48,7 @@ then
     systemctl start mysqld &>>$LOG_FILE
     VALIDATE $? "Starting MySQL Service"
 else
-    echo "Mysql is already $Y installed, nothing to do...$N"
+    echo -e "Mysql is already $Y installed, nothing to do...$N"
 fi
 
 mysql -h mysql.daws100s.online -u root -pExpenseApp@1 -e "show databases;" &>>$LOG_FILE
