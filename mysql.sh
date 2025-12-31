@@ -51,12 +51,12 @@ else
     echo -e "Mysql is already $Y installed, nothing to do...$N"
 fi
 
-mysql -h mysql.daws100s.online -u root -pExpenseApp@1 -e "show databases;" &>>$LOG_FILE
-
-if [ $? -ne 0 ]; then
-    echo "MySQL root password not set. Setting now..." | tee -a $LOG_FILE
-    mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOG_FILE
-    VALIDATE $? "Setting MySQL root password"
+mysql -h mysql.daws100s.online -u root -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE
+if [ $? -ne 0 ]
+then
+    echo "MySQL root password is not setup, setting now" &>>$LOG_FILE
+    mysql_secure_installation --set-root-pass ExpenseApp@1
+    VALIDATE $? "Setting UP root password"
 else
-    echo -e "$Y MySQL root password already set... skipping $N" | tee -a $LOG_FILE
+    echo -e "MySQL root password is already setup...$Y SKIPPING $N" | tee -a $LOG_FILE
 fi
