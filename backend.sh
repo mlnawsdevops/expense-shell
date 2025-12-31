@@ -61,7 +61,49 @@ then
     useradd expense &>>$LOG_FILE
     VALIDATE $? "Expense user added"
 else
-    echo "expense user is already added, nothing to do..." | tee -a $LOG_FILE
+    echo -e "expense user is already added, nothing to do...$Y SKIPPING $N" | tee -a $LOG_FILE
 fi
+
+mkdir -p /app
+VALIDATE $? "creating /app folder"
+
+curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+VALIDATE $? "Downloading backend application code"
+
+cd /app
+rm -rf /app/*
+unzip /tmp/backend.zip &>>$LOG_FILE
+VALIDATE $? "Extracting backend application code"
+
+npm install &>>$LOG_FILE
+
+cp /home/ec2-user/expense-shell/backend.service /etc/systemd/system/backend.service
+
+dnf install mysql -y
+VALIDATE $? "Installing Mysql"
+
+mysql -h mysql.daws100s.online -u root -pExpenseApp@1 < /app/schema/backend.sql &>>$LOG_FILE
+VALIDATE $? "Schema Loading"
+
+systemctl daemon-reload &>>$LOG_FILE
+VALIDATE $? "Daemon reload"
+
+systemctl enable backend &>>$LOG_FILE
+VALIDATE $? "Enabling backend"
+
+systemctl restart backend &>>$LOG_FILE
+VALIDATE $? "Restarted backend"
+
+systemctl status backend | tee -a $LOG_FILE
+VALIDATE $? "Backend status"
+
+nestat -lntp | tee -a $LOG_FILE
+VALIDATE $? "Backend port 8080"
+
+ps -ef | grep nodejs | tee -a $LOG_FILE
+VALIDATE $? "Backend process"
+
+
+
 
 
