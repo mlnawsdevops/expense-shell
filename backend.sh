@@ -24,18 +24,23 @@ CHECK_ROOT(){
 
 CHECK_ROOT
 
+echo "Script started executing at: $(date)" | tee -a $LOG_FILE
+
 VALIDATE(){
     if [ $1 -ne 0 ]
     then    
-        echo "$2 is...Failed"
+        echo "$2 is...Failed" | tee -a $LOG_FILE
+        exit 1
     else
-        echo "$2 is...Success"
+        echo "$2 is...Success" | tee -a $LOG_FILE
     fi
 }
 
-dnf module disable nodejs -y
+dnf module disable nodejs -y &>>$LOG_FILE
+VALIDATE $? "Disable nodejs"
 
-dnf module enable nodejs:20 -y
+dnf module enable nodejs:20 -y &>>$LOG_FILE
+VALIDATE $? "Enable nodejs:20"
 
 dnf list installed nodejs
 
@@ -48,5 +53,15 @@ else
     echo "nodejs is already installed, nothing to do..."
 fi
 
+id expense
+
+if [ $? -ne 0 ]
+then 
+    echo "expense user is not added, going to added it..."
+    useradd expense
+    VALIDATE $? "Expense user added"
+else
+    echo "expense user is already added, nothing to do..."
+fi
 
 
