@@ -42,20 +42,16 @@ then
     dnf install mysql-server -y &>>$LOG_FILE
     VALIDATE $? "Installing MySQL Server"
 
-    systemctl enable mysqldd &>>$LOG_FILE
-    VALIDATE $? "Enabling MySQL Service"
-
-    systemctl start mysqld &>>$LOG_FILE
-    VALIDATE $? "Starting MySQL Service"
 else
     echo -e "Mysql is already $Y installed, nothing to do...$N" | tee -a $LOG_FILE
 
-    systemctl enable mysqld &>>$LOG_FILE
-    VALIDATE $? "Enabling MySQL Service"
-
-    systemctl start mysqld &>>$LOG_FILE
-    VALIDATE $? "Starting MySQL Service"
 fi
+
+systemctl enable mysqld &>>$LOG_FILE
+VALIDATE $? "Enabling MySQL Service"
+
+systemctl start mysqld &>>$LOG_FILE
+VALIDATE $? "Starting MySQL Service"
 
 mysql -h mysql.daws100s.online -u root -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE
 
@@ -67,3 +63,5 @@ then
 else
     echo -e "MySQL root password is already setup...$Y SKIPPING $N" | tee -a $LOG_FILE
 fi
+
+echo -e "$G MySQL setup completed successfully $N" | tee -a $LOG_FILE
