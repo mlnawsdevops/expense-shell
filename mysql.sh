@@ -42,7 +42,7 @@ then
     dnf install mysql-server -y &>>$LOG_FILE
     VALIDATE $? "Installing MySQL Server"
 
-    systemctl enable mysqld &>>$LOG_FILE
+    systemctl enable mysqldd &>>$LOG_FILE
     VALIDATE $? "Enabling MySQL Service"
 
     systemctl start mysqld &>>$LOG_FILE
@@ -52,6 +52,7 @@ else
 fi
 
 mysql -h mysql.daws100s.online -u root -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE
+
 if [ $? -ne 0 ]
 then
     echo "MySQL root password is not setup, setting now" | tee -a $LOG_FILE
