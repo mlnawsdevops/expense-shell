@@ -34,16 +34,21 @@ CHECK_ROOT
 
 echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
-dnf install mysql-server -y &>>$LOG_FILE
-VALIDATE $? "Installing MySQL Server"
+dnf list installed mysql
 
-systemctl enable mysqld &>>$LOG_FILE
-VALIDATE $? "Enabling MySQL Service"
+if [ $? -ne 0 ]
 
-systemctl start mysqld &>>$LOG_FILE
-VALIDATE $? "Starting MySQL Service"
+    dnf install mysql-server -y &>>$LOG_FILE
+    VALIDATE $? "Installing MySQL Server"
 
-mysql -u root -pExpenseApp@1 -e "show databases;" &>>$LOG_FILE
+    systemctl enable mysqld &>>$LOG_FILE
+    VALIDATE $? "Enabling MySQL Service"
+
+    systemctl start mysqld &>>$LOG_FILE
+    VALIDATE $? "Starting MySQL Service"
+fi
+
+mysql -h mysql.daws100s.online -u root -pExpenseApp@1 -e "show databases;" &>>$LOG_FILE
 
 if [ $? -ne 0 ]; then
     echo "MySQL root password not set. Setting now..." | tee -a $LOG_FILE
