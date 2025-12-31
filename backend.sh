@@ -103,6 +103,12 @@ VALIDATE $? "Backend port 8080"
 ps -ef | grep nodejs &>>$LOG_FILE
 VALIDATE $? "Backend process"
 
+PING mysql.daws100s.online
+VALIDATE $? "Pinging mysql"
+
+telnet mysql.daws100s.online 3306
+VALIDATE $? "mysql is connected to backend"
+
 
 
 
