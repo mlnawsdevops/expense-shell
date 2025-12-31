@@ -67,7 +67,7 @@ fi
 mkdir -p /app
 VALIDATE $? "creating /app folder"
 
-curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>$LOG_FILE
 VALIDATE $? "Downloading backend application code"
 
 cd /app
@@ -79,7 +79,7 @@ npm install &>>$LOG_FILE
 
 cp /home/ec2-user/expense-shell/backend.service /etc/systemd/system/backend.service
 
-dnf install mysql -y
+dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Installing Mysql"
 
 mysql -h mysql.daws100s.online -u root -pExpenseApp@1 < /app/schema/backend.sql &>>$LOG_FILE
