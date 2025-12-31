@@ -97,10 +97,10 @@ VALIDATE $? "Restarted backend"
 systemctl status backend | tee -a $LOG_FILE
 VALIDATE $? "Backend status"
 
-netstat -lntp | tee -a $LOG_FILE
+netstat -lntp &>>$LOG_FILE
 VALIDATE $? "Backend port 8080"
 
-ps -ef | grep nodejs | tee -a $LOG_FILE
+ps -ef | grep nodejs &>>$LOG_FILE
 VALIDATE $? "Backend process"
 
 
