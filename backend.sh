@@ -42,26 +42,26 @@ VALIDATE $? "Disable nodejs"
 dnf module enable nodejs:20 -y &>>$LOG_FILE
 VALIDATE $? "Enable nodejs:20"
 
-dnf list installed nodejs
+dnf list installed nodejs &>>$LOG_FILE
 
 if [ $? -ne 0 ]
 then
-    echo "nodejs is not installed...going to install it"
-    dnf install nodejs -y
+    echo "nodejs is not installed...going to install it" | tee -a $LOG_FILE
+    dnf install nodejs -y &>>$LOG_FILE
     VALIDATE $? "Installing nodejs"
 else
-    echo "nodejs is already installed, nothing to do..."
+    echo -e "nodejs is already $Y installed, nothing to do...$N" | tee -a $LOG_FILE
 fi
 
-id expense
+id expense | tee -a $LOG_FILE
 
 if [ $? -ne 0 ]
 then 
-    echo "expense user is not added, going to added it..."
-    useradd expense
+    echo "expense user is not added, going to added it..." | tee -a $LOG_FILE
+    useradd expense &>>$LOG_FILE
     VALIDATE $? "Expense user added"
 else
-    echo "expense user is already added, nothing to do..."
+    echo "expense user is already added, nothing to do..." | tee -a $LOG_FILE
 fi
 
 
