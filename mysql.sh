@@ -47,7 +47,7 @@ else
 
 fi
 
-systemctl enable mysqld &>>$LOG_FILE
+systemctl enable mysqldd &>>$LOG_FILE
 VALIDATE $? "Enabling MySQL Service"
 
 systemctl start mysqld &>>$LOG_FILE
