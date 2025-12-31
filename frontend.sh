@@ -36,7 +36,7 @@ echo "Script started execution at: $(date)" | tee -a $LOG_FILE
 
 dnf list installed nginx 
 
-if [ $? -ne 0]
+if [ $? -ne 0 ]
 then
     echo "Nginx is not installed, going to install it"
     dnf install nginx -y
