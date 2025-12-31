@@ -49,8 +49,8 @@ then
     VALIDATE $? "Starting MySQL Service"
 else
     echo -e "Mysql is already $Y installed, nothing to do...$N" | tee -a $LOG_FILE
-    
-    systemctl enable mysqldd &>>$LOG_FILE
+
+    systemctl enable mysqld &>>$LOG_FILE
     VALIDATE $? "Enabling MySQL Service"
 
     systemctl start mysqld &>>$LOG_FILE
