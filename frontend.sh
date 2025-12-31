@@ -44,7 +44,7 @@ then
     dnf install nginx -y &>>$LOG_FILE
     VALIDATE $? "Nginx installation"
 else
-    echo "Nginx is already installed, nothing to do...$Y SKIPPING $N" | tee -a $LOG_FILE
+    echo -e "Nginx is already installed, nothing to do...$Y SKIPPING $N" | tee -a $LOG_FILE
 fi
 
 systemctl enable nginx &>>$LOG_FILE
@@ -71,7 +71,7 @@ VALIDATE $? "Restarting the nginx"
 systemctl status nginx &>>$LOG_FILE
 VALIDATE $? "Nginx status"
 
-netstat -lntp &>>$LOG_FILE
+netstat -lntp | tee -a $LOG_FILE
 VALIDATE $? "Frontend port 80 is running"
 
 telnet backend.daws100s.online 8080 
